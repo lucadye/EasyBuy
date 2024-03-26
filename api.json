@@ -1,0 +1,839 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "EasyBuy",
+    "version": "1.0.0",
+    "description": "A RESTful Backend for E-Commerce sites."
+  },
+  "tags": [
+    {
+      "name": "Users",
+      "description": "Operations used for interfacing with users."
+    },
+    {
+      "name": "Products",
+      "description": "Operations used for interfacing with products."
+    },
+    {
+      "name": "Product Options",
+      "description": "Operations used for interfacing with product options."
+    },
+    {
+      "name": "Product Lists",
+      "description": "Operations used for interfacing with product lists."
+    },
+    {
+      "name": "Orders",
+      "description": "Operations used for interfacing with orders."
+    }
+  ],
+  "paths": {
+    "/users": {
+      "post": {
+        "summary": "Creates a new user",
+        "operationId": "userAdd",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "example": "{\n  \"email\": \"bob@example.com\",\n  \"password\": \"P@$$W0RD_123\"\n}"
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created new user",
+            "content": {
+              "application/json": {
+                "example": "{\n  \"id\": 2,\n  \"email\": \"bob@example.com\",\n  \"admin\": false\n}"
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request body"
+          },
+          "default": {
+            "description": "Default error sample response"
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/users/{id}": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "id",
+          "schema": {
+            "type": "integer"
+          },
+          "required": true,
+          "description": "The unique id of a user"
+        }
+      ],
+      "get": {
+        "summary": "Reads a user",
+        "operationId": "userRead",
+        "responses": {
+          "200": {
+            "description": "Retrieved the user",
+            "content": {
+              "application/json": {
+                "example": "{\n  \"id\": 2,\n  \"email\": \"bob@example.com\",\n  \"admin\": false\n}"
+              }
+            }
+          },
+          "401": {
+            "description": "The user is not authenticated"
+          },
+          "403": {
+            "description": "The user is not authorized"
+          },
+          "404": {
+            "description": "Unable to find user"
+          },
+          "default": {
+            "description": "Default error sample response"
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      },
+      "patch": {
+        "summary": "Edits a user",
+        "operationId": "userEdit",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "example": "{\n  \"email\": \"bob@example.net\",\n  \"password\": \"B3773R_P@$$W0RD_123\"\n}"
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Edited the user"
+          },
+          "400": {
+            "description": "Malformed request body"
+          },
+          "401": {
+            "description": "The user is not authenticated"
+          },
+          "403": {
+            "description": "The user is not authorized"
+          },
+          "404": {
+            "description": "Unable to find user"
+          },
+          "default": {
+            "description": "Default error sample response"
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      },
+      "delete": {
+        "summary": "Deletes a user",
+        "operationId": "userDelete",
+        "responses": {
+          "204": {
+            "description": "Deleted the user"
+          },
+          "401": {
+            "description": "The user is not authenticated"
+          },
+          "403": {
+            "description": "The user is not authorized"
+          },
+          "404": {
+            "description": "Unable to find user"
+          },
+          "default": {
+            "description": "Default error sample response"
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/auth": {
+      "post": {
+        "summary": "Authenticates the user",
+        "operationId": "userLogin",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "example": "{\n  \"email\": \"alice@example.com\",\n  \"password\": \"$3CUR3_@DM1N_P@$$W0RD\"\n}"
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Authenticated the user"
+          },
+          "401": {
+            "description": "The provided password does not match the provided email"
+          },
+          "404": {
+            "description": "Unable to find a user associated with the provided email"
+          },
+          "default": {
+            "description": "Default error sample response"
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/deauth": {
+      "post": {
+        "summary": "Deauthenticates the user",
+        "operationId": "userLogout",
+        "responses": {
+          "204": {
+            "description": "Deauthenticated the user"
+          },
+          "401": {
+            "description": "The user was not and is not authenticated"
+          },
+          "default": {
+            "description": "Default error sample response"
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/products": {
+      "get": {
+        "summary": "Retrieves all products",
+        "operationId": "productBrowse",
+        "responses": {
+          "200": {
+            "description": "Retrieved all products",
+            "content": {
+              "application/json": {
+                "example": "[\n  {\n    \"id\": 1,\n    \"name\": \"'Hello, World!' Button\",\n    \"description\": \"The *echo* of a programmers first program, *print()*-ed onto a quality metal button.\",\n    \"price\": 1\n  },\n  {\n    \"id\": 2,\n    \"name\": \"Hacker's Hoodie\",\n    \"description\": \"A black hoodie that only a mysterious hacker might wear...\",\n    \"price\": 30\n  },\n  {\n    \"id\": 3,\n    \"name\": \"'Java Container' Mug\",\n    \"description\": \"A quality mug with 'Java Container' written on one side, and the Java logo on the other.\",\n    \"price\": 15\n  }\n]"
+              }
+            }
+          },
+          "default": {
+            "description": "Default error sample response"
+          }
+        },
+        "tags": [
+          "Products"
+        ]
+      },
+      "post": {
+        "summary": "Creates a new product",
+        "operationId": "productAdd",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "example": "{\n  \"name\": \"'Hello, World!' Button\",\n  \"description\": \"The *echo* of a programmers first program, *print()*-ed onto a quality metal button.\",\n  \"price\": 1,\n  \"options\": [\n    {\n      \"name\": \"Generic\"\n    },\n    {\n      \"name\": \"C\",\n      \"price_mod\": 0.25\n    },\n    {\n      \"name\": \"Python 3\",\n      \"price_mod\": 0.25\n    },\n    {\n      \"name\": \"JavaScript\",\n      \"price_mod\": 0.25\n    },\n    {\n      \"name\": \"PHP\",\n      \"price_mod\": 0.25\n    }\n  ]\n}"
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created new product",
+            "content": {
+              "application/json": {
+                "example": "{\n  \"id\": 1,\n  \"name\": \"'Hello, World!' Button\",\n  \"description\": \"The *echo* of a programmers first program, *print()*-ed onto a quality metal button.\",\n  \"price\": 1\n}"
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request body"
+          },
+          "default": {
+            "description": "Default error sample response"
+          }
+        },
+        "tags": [
+          "Products"
+        ]
+      }
+    },
+    "/products/{id}": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "id",
+          "schema": {
+            "type": "integer"
+          },
+          "required": true,
+          "description": "The unique id of a product"
+        }
+      ],
+      "get": {
+        "summary": "Retrieves a product",
+        "operationId": "productRead",
+        "responses": {
+          "200": {
+            "description": "Retrieved the product",
+            "content": {
+              "application/json": {
+                "example": "{\n  \"id\": 1,\n  \"name\": \"'Hello, World!' Button\",\n  \"description\": \"The *echo* of a programmers first program, *print()*-ed onto a quality metal button.\",\n  \"price\": 1\n}"
+              }
+            }
+          },
+          "404": {
+            "description": "Unable to find product"
+          },
+          "default": {
+            "description": "Default error sample response"
+          }
+        },
+        "tags": [
+          "Products"
+        ]
+      },
+      "patch": {
+        "summary": "Modifies a product",
+        "operationId": "productEdit",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "example": "{\n  \"name\": \"'Hello, World!' Button\",\n  \"description\": \"The *echo* of a programmers first program, *print()*-ed onto a quality metal button.\",\n  \"price\": 1.5\n}"
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Modified the product"
+          },
+          "400": {
+            "description": "Malformed request body"
+          },
+          "404": {
+            "description": "Unable to find product"
+          },
+          "default": {
+            "description": "Default error sample response"
+          }
+        },
+        "tags": [
+          "Products"
+        ]
+      },
+      "delete": {
+        "summary": "Deletes a product",
+        "operationId": "productDelete",
+        "responses": {
+          "204": {
+            "description": "Deleted the product"
+          },
+          "404": {
+            "description": "Unable to find product"
+          },
+          "default": {
+            "description": "Default error sample response"
+          }
+        },
+        "tags": [
+          "Products"
+        ]
+      }
+    },
+    "/products/{id}/options": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "id",
+          "schema": {
+            "type": "integer"
+          },
+          "required": true,
+          "description": "The unique id of a product"
+        }
+      ],
+      "get": {
+        "summary": "Retrieves all the options of a product",
+        "operationId": "optionBrowse",
+        "responses": {
+          "200": {
+            "description": "Retrieved all options",
+            "content": {
+              "application/json": {
+                "example": "[\n  {\n    \"name\": \"Generic\",\n    \"price_mod\": 0\n  },\n  {\n    \"name\": \"C\",\n    \"price_mod\": 0.25\n  },\n  {\n    \"name\": \"Python 3\",\n    \"price_mod\": 0.25\n  },\n  {\n    \"name\": \"JavaScript\",\n    \"price_mod\": 0.25\n  },\n  {\n    \"name\": \"PHP\",\n    \"price_mod\": 0.25\n  }\n]"
+              }
+            }
+          },
+          "404": {
+            "description": "Unable to find product"
+          },
+          "default": {
+            "description": "Default error sample response"
+          }
+        },
+        "tags": [
+          "Product Options"
+        ]
+      },
+      "post": {
+        "summary": "Creates a new option for a product",
+        "operationId": "optionAdd",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "example": "{\n  \"name\": \"Rust\",\n  \"price_mod\": 0.25\n}"
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created new option",
+            "content": {
+              "application/json": {
+                "example": "{\n  \"index\": 5,\n  \"option\": {\n    \"name\": \"Rust\",\n    \"price_mod\": 0.25\n  }\n}"
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request body"
+          },
+          "404": {
+            "description": "Unable to find product"
+          },
+          "default": {
+            "description": "Default error sample response"
+          }
+        },
+        "tags": [
+          "Product Options"
+        ]
+      }
+    },
+    "/products/{productId}/options/{optionId}": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "productId",
+          "schema": {
+            "type": "integer"
+          },
+          "required": true,
+          "description": "The unique id of a product"
+        },
+        {
+          "in": "path",
+          "name": "optionId",
+          "schema": {
+            "type": "integer"
+          },
+          "required": true,
+          "description": "The id of an option for the product"
+        }
+      ],
+      "get": {
+        "summary": "Retrieves an option of a product",
+        "operationId": "optionRead",
+        "responses": {
+          "200": {
+            "description": "Retrieved the option",
+            "content": {
+              "application/json": {
+                "example": "{\n  \"name\": \"JavaScript\",\n  \"price_mod\": 0.25\n}"
+              }
+            }
+          },
+          "404": {
+            "description": "Unable to find either the product or the option"
+          },
+          "default": {
+            "description": "Default error sample response"
+          }
+        },
+        "tags": [
+          "Product Options"
+        ]
+      },
+      "patch": {
+        "summary": "Modifies an option of a product",
+        "operationId": "optionEdit",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "example": "{\n  \"name\": \"Python 3/Dart\",\n  \"price_mod\": 0.25\n}"
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Modified the option"
+          },
+          "400": {
+            "description": "Malformed request body"
+          },
+          "404": {
+            "description": "Unable to find either the product or the option"
+          },
+          "default": {
+            "description": "Default error sample response"
+          }
+        },
+        "tags": [
+          "Product Options"
+        ]
+      },
+      "delete": {
+        "summary": "Deletes an option of a product",
+        "operationId": "optionDelete",
+        "responses": {
+          "204": {
+            "description": "Deleted the option"
+          },
+          "404": {
+            "description": "Unable to find either the product or the option"
+          },
+          "default": {
+            "description": "Default error sample response"
+          }
+        },
+        "tags": [
+          "Product Options"
+        ]
+      }
+    },
+    "/product-lists": {
+      "post": {
+        "summary": "Creates a new product list",
+        "operationId": "productListAdd",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "example": "[\n  {\n    \"id\": 1,\n    \"count\": 3\n  },\n  {\n    \"id\": 2,\n    \"count\": 1\n  }\n]"
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created new product list",
+            "content": {
+              "application/json": {
+                "example": "{\n  \"id\": 1,\n  \"products\": [\n    {\n      \"id\": 1,\n      \"name\": \"'Hello, World!' Button\",\n      \"price\": \"1.5\",\n      \"count\": 3,\n      \"option\": {\n        \"id\": 4,\n        \"name\": \"JavaScript\",\n        \"price_mod\": 0.25\n      }\n    },\n    {\n      \"id\": 2,\n      \"name\": \"Hacker's Hoodie\",\n      \"price\": \"30\",\n      \"count\": 1,\n      \"option\": {\n        \"id\": 3,\n        \"name\": \"JavaScript\",\n        \"price_mod\": 0.25\n      }\n    }\n  ]\n}"
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request body"
+          },
+          "404": {
+            "description": "Unable to find one or more products"
+          },
+          "default": {
+            "description": "Default error sample response"
+          }
+        },
+        "tags": [
+          "Product Lists"
+        ]
+      }
+    },
+    "/product-lists/{id}": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "id",
+          "schema": {
+            "type": "integer"
+          },
+          "required": true,
+          "description": "The unique id of a product list"
+        }
+      ],
+      "get": {
+        "summary": "Retrieves a product list",
+        "operationId": "productListRead",
+        "responses": {
+          "200": {
+            "description": "Retrieved the product list",
+            "content": {
+              "application/json": {
+                "example": "{\n  \"id\": 1,\n  \"products\": [\n    {\n      \"id\": 1,\n      \"name\": \"'Hello, World!' Button\",\n      \"price\": \"1.5\",\n      \"count\": 3,\n      \"option\": {\n        \"id\": 4,\n        \"name\": \"JavaScript\",\n        \"price_mod\": 0.25\n      }\n    },\n    {\n      \"id\": 2,\n      \"name\": \"Hacker's Hoodie\",\n      \"price\": \"30\",\n      \"count\": 1,\n      \"option\": {\n        \"id\": 3,\n        \"name\": \"JavaScript\",\n        \"price_mod\": 0.25\n      }\n    }\n  ]\n}"
+              }
+            }
+          },
+          "404": {
+            "description": "Unable to find the product list"
+          },
+          "default": {
+            "description": "Default error sample response"
+          }
+        },
+        "tags": [
+          "Product Lists"
+        ]
+      },
+      "patch": {
+        "summary": "Modifies a product list",
+        "operationId": "productListEdit",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "example": "[\n  {\n    \"id\": 1,\n    \"count\": 2\n  },\n  {\n    \"id\": 2,\n    \"count\": 1\n  }\n]"
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Modified the product list",
+            "content": {
+              "application/json": {
+                "example": "{\n  \"id\": 1,\n  \"products\": [\n    {\n      \"id\": 1,\n      \"name\": \"'Hello, World!' Button\",\n      \"price\": \"1.5\",\n      \"count\": 2,\n      \"option\": {\n        \"id\": 4,\n        \"name\": \"JavaScript\",\n        \"price_mod\": 0.25\n      }\n    },\n    {\n      \"id\": 2,\n      \"name\": \"Hacker's Hoodie\",\n      \"price\": \"30\",\n      \"count\": 1,\n      \"option\": {\n        \"id\": 3,\n        \"name\": \"JavaScript\",\n        \"price_mod\": 0.25\n      }\n    }\n  ]\n}"
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request body"
+          },
+          "404": {
+            "description": "Unable to find either the product list or one or more products"
+          },
+          "default": {
+            "description": "Default error sample response"
+          }
+        },
+        "tags": [
+          "Product Lists"
+        ]
+      },
+      "delete": {
+        "summary": "Deletes a product list",
+        "operationId": "productListDelete",
+        "responses": {
+          "204": {
+            "description": "Deleted the product list"
+          },
+          "404": {
+            "description": "Unable to find the product list"
+          },
+          "default": {
+            "description": "Default error sample response"
+          }
+        },
+        "tags": [
+          "Product Lists"
+        ]
+      }
+    },
+    "/orders": {
+      "get": {
+        "summary": "Retrieves many orders based on filters",
+        "operationId": "ordersBrowse",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "pending",
+                "rejected",
+                "fulfilled"
+              ]
+            },
+            "required": true,
+            "description": "The status of the order"
+          },
+          {
+            "in": "query",
+            "name": "sortOrder",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            },
+            "required": false,
+            "description": "The order by which to sort the orders"
+          },
+          {
+            "in": "query",
+            "name": "sortBy",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "user",
+                "datetime"
+              ]
+            },
+            "required": false,
+            "description": "The information by which to sort the orders"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retrieved the orders",
+            "content": {
+              "application/json": {
+                "example": "[\n  {\n    \"id\": 1,\n    \"datetime\": \"2024-04-01T12:34:52.422Z\",\n    \"status\": \"pending\",\n    \"list_id\": 2,\n    \"user_id\": 1\n  },\n  {\n    \"id\": 5,\n    \"datetime\": \"2024-04-02T18:41:38.633Z\",\n    \"status\": \"pending\",\n    \"list_id\": 3,\n    \"user_id\": 2\n  },\n  {\n    \"id\": 9,\n    \"datetime\": \"2024-04-03T17:57:42.844Z\",\n    \"status\": \"pending\",\n    \"list_id\": 7,\n    \"user_id\": 3\n  }\n]"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid query parameter(s)"
+          }
+        },
+        "tags": [
+          "Orders"
+        ]
+      }
+    },
+    "/users/{id}/orders": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "id",
+          "schema": {
+            "type": "integer"
+          },
+          "required": true,
+          "description": "The unique id of a user"
+        }
+      ],
+      "get": {
+        "summary": "Retrieves all of user's orders",
+        "operationId": "userOrdersBrowse",
+        "responses": {
+          "200": {
+            "description": "Retrieved the user's orders",
+            "content": {
+              "application/json": {
+                "example": "[\n  {\n    \"id\": 1,\n    \"datetime\": \"2024-04-01T12:34:52.422Z\",\n    \"status\": \"rejected\",\n    \"list_id\": 2\n  },\n  {\n    \"id\": 2,\n    \"datetime\": \"2024-04-02T18:41:38.633Z\",\n    \"status\": \"fulfilled\",\n    \"list_id\": 4\n  },\n  {\n    \"id\": 3,\n    \"datetime\": \"2024-04-03T17:57:42.844Z\",\n    \"status\": \"pending\",\n    \"list_id\": 6\n  }\n]"
+              }
+            }
+          },
+          "404": {
+            "description": "Unable to find the user"
+          }
+        },
+        "tags": [
+          "Orders"
+        ]
+      },
+      "post": {
+        "summary": "Creates new order for a user",
+        "operationId": "userOrdersAdd",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "example": "{\n  \"list_id\": 8\n}"
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created the user's order",
+            "content": {
+              "application/json": {
+                "example": "{\n  \"id\": 1,\n  \"datetime\": \"2024-04-04T11:15:53.211Z\",\n  \"status\": \"pending\",\n  \"list_id\": 1,\n  \"user_id\": 1\n}"
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request body"
+          },
+          "404": {
+            "description": "Unable to find either the user or the product list"
+          }
+        },
+        "tags": [
+          "Orders"
+        ]
+      }
+    },
+    "/users/{userId}/orders/{orderId}": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "userId",
+          "schema": {
+            "type": "integer"
+          },
+          "required": true,
+          "description": "The unique id of a user"
+        },
+        {
+          "in": "path",
+          "name": "orderId",
+          "schema": {
+            "type": "integer"
+          },
+          "required": true,
+          "description": "The unique id of an order"
+        }
+      ],
+      "get": {
+        "summary": "Retrieves one of a user's orders",
+        "operationId": "userOrdersRead",
+        "responses": {
+          "200": {
+            "description": "Retrieved the user's order",
+            "content": {
+              "application/json": {
+                "example": "{\n  \"id\": 1,\n  \"datetime\": \"2024-04-01T12:34:52.422Z\",\n  \"status\": \"pending\",\n  \"list_id\": 2\n}"
+              }
+            }
+          },
+          "404": {
+            "description": "Unable to find either the user or the order"
+          }
+        },
+        "tags": [
+          "Orders"
+        ]
+      },
+      "patch": {
+        "summary": "Modifies user's order",
+        "operationId": "userOrdersEdit",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "example": "{\n  \"datetime\": \"2024-04-14T21:15:53.211Z\",\n  \"status\": \"fulfilled\",\n  \"list_id\": 5\n}"
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Modified the user's order"
+          },
+          "400": {
+            "description": "Malformed request body"
+          },
+          "404": {
+            "description": "Unable to find either the user, the order, or the product list"
+          }
+        },
+        "tags": [
+          "Orders"
+        ]
+      },
+      "delete": {
+        "summary": "Deletes one of a user's orders",
+        "operationId": "userOrdersDelete",
+        "responses": {
+          "204": {
+            "description": "Deleted the user's order"
+          },
+          "404": {
+            "description": "Unable to find either the user, the order, or the product list"
+          }
+        },
+        "tags": [
+          "Orders"
+        ]
+      }
+    }
+  }
+}
