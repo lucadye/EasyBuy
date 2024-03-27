@@ -80,7 +80,7 @@
             "description": "Retrieved the user",
             "content": {
               "application/json": {
-                "example": "{\n  \"id\": 2,\n  \"email\": \"bob@example.com\",\n  \"admin\": false\n}"
+                "example": "{\n  \"id\": 2,\n  \"email\": \"bob@example.com\",\n  \"admin\": false,\n  \"cart_id\": 7\n}"
               }
             }
           },
@@ -107,7 +107,7 @@
         "requestBody": {
           "content": {
             "application/json": {
-              "example": "{\n  \"email\": \"bob@example.net\",\n  \"password\": \"B3773R_P@$$W0RD_123\"\n}"
+              "example": "{\n  \"email\": \"bob@example.net\",\n  \"password\": \"B3773R_P@$$W0RD_123\",\n    \"cart_id\": 9\n}"
             }
           }
         },
@@ -159,6 +159,19 @@
           "Users"
         ]
       }
+    },
+    "/users/{id}/cart": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "id",
+          "schema": {
+            "type": "integer"
+          },
+          "required": true,
+          "description": "The unique id of a user"
+        }
+      ]
     },
     "/auth": {
       "post": {
