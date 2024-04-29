@@ -17,7 +17,7 @@ stdout.write('\rConnecting to database...');
 db.connect();
 stdout.write('\rConnected to database.   ');
 
-process.on('exit', function(code) {
+process.on('exit', code => {
   stdout.write('\rClosing database connection...')
   db.end();
   stdout.write('\rClosed database connection.   ');
@@ -83,8 +83,8 @@ run(`Created table 'product_lists'`, `
 run(`Created table 'users'`, `
   CREATE TABLE users (
     id serial PRIMARY KEY,
-    email varchar(254) NOT NULL,
-    hash varchar(256) NOT NULL,
+    email varchar(254) UNIQUE NOT NULL,
+    hash varchar(72) NOT NULL,
     admin boolean NOT NULL DEFAUlT false,
     cart_id integer
   );`

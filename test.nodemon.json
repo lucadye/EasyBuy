@@ -2,16 +2,17 @@
   "restartable": "rs",
   "ignore": [
     ".git",
-    "node_modules/**/node_modules"
+    "node_modules/**/node_modules",
+    "buildDatabase.js",
+    "clearDatabase.js",
+    "watch.nodemon.json"
   ],
-  "verbose": true,
+  "verbose": false,
   "execMap": {
     "js": "node"
   },
-  "events": {
-    "restart": "osascript -e 'display notification \"App restarted due to:\n'$FILENAME'\" with title \"nodemon\"'"
-  },
   "watch": [
+    ".env",
     "./*.js",
     "./*.json"
   ],

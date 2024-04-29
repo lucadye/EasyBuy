@@ -17,7 +17,7 @@ stdout.write('\rConnecting to database...');
 db.connect();
 stdout.write('\rConnected to database.   ');
 
-process.on('exit', function(code) {
+process.on('exit', code => {
   stdout.write('\rClosing database connection...')
   db.end();
   stdout.write('\rClosed database connection.   ');

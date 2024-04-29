@@ -51,6 +51,9 @@
           "400": {
             "description": "Malformed request body"
           },
+          "409": {
+            "description": "Email already in use"
+          },
           "default": {
             "description": "Default error sample response"
           }
