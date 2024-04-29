@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha --recursive --require chai/register-expect.js",
-    "watch-test": "nodemon --config test.nodemon.json --exec npm test",
+    "test-watch": "nodemon --config test.nodemon.json --exec npm test",
     "watch": "nodemon --config watch.nodemon.json ./index.js",
     "build-database": "node ./buildDatabase.js",
     "clear-database": "node ./clearDatabase.js",
