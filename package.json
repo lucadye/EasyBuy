@@ -4,7 +4,7 @@
   "description": "A RESTful Backend for E-Commerce sites.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --recursive --require chai/register-expect.js",
+    "test": "mocha --recursive --require chai/register-expect.js || exit 1",
     "test-watch": "nodemon --config test.nodemon.json --exec npm test",
     "watch": "nodemon --config watch.nodemon.json ./index.js",
     "build-database": "node ./buildDatabase.js",
