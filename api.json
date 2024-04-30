@@ -7,6 +7,10 @@
   },
   "tags": [
     {
+      "name": "Authentication",
+      "description": "Operations for handling user authentication."
+    },
+    {
       "name": "Users",
       "description": "Operations used for interfacing with users."
     },
@@ -28,41 +32,6 @@
     }
   ],
   "paths": {
-    "/users": {
-      "post": {
-        "summary": "Creates a new user",
-        "operationId": "userAdd",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "example": "{\n  \"email\": \"bob@example.com\",\n  \"password\": \"P@$$W0RD_123\"\n}"
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Created new user",
-            "content": {
-              "application/json": {
-                "example": "{\n  \"id\": 2,\n  \"email\": \"bob@example.com\",\n  \"admin\": false\n}"
-              }
-            }
-          },
-          "400": {
-            "description": "Malformed request body"
-          },
-          "409": {
-            "description": "Email already in use"
-          },
-          "default": {
-            "description": "Default error sample response"
-          }
-        },
-        "tags": [
-          "Users"
-        ]
-      }
-    },
     "/users/{id}": {
       "parameters": [
         {
@@ -110,7 +79,7 @@
         "requestBody": {
           "content": {
             "application/json": {
-              "example": "{\n  \"email\": \"bob@example.net\",\n  \"password\": \"B3773R_P@$$W0RD_123\",\n    \"cart_id\": 9\n}"
+              "example": "{\n  \"email\": \"bob@example.net\",\n  \"name\": \"Bobby\",\n  \"password\": \"B3773R_P@$$W0RD_123\",\n    \"cart_id\": 9\n}"
             }
           }
         },
@@ -176,9 +145,39 @@
         }
       ]
     },
-    "/auth": {
+    "/auth/sign-up": {
       "post": {
-        "summary": "Authenticates the user",
+        "summary": "Registers the user",
+        "operationId": "userRegister",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "example": "{\n  \"email\": \"alice@example.com\",\n  \"password\": \"$3CUR3_@DM1N_P@$$W0RD\"\n}"
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Authenticated the user"
+          },
+          "401": {
+            "description": "The provided password does not match the provided email"
+          },
+          "404": {
+            "description": "Unable to find a user associated with the provided email"
+          },
+          "default": {
+            "description": "Default error sample response"
+          }
+        },
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/auth/sign-in": {
+      "post": {
+        "summary": "Logs the user in",
         "operationId": "userLogin",
         "requestBody": {
           "content": {
@@ -202,13 +201,13 @@
           }
         },
         "tags": [
-          "Users"
+          "Authentication"
         ]
       }
     },
-    "/deauth": {
+    "/auth/sign-out": {
       "post": {
-        "summary": "Deauthenticates the user",
+        "summary": "Logs the user out",
         "operationId": "userLogout",
         "responses": {
           "204": {
@@ -222,7 +221,7 @@
           }
         },
         "tags": [
-          "Users"
+          "Authentication"
         ]
       }
     },

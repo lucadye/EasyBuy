@@ -1,8 +1,12 @@
-const { validateEmail, parseBool } = require('./helpers.js');
+const {
+  parseBool,
+  stringSize,
+} = require('./helpers.js');
 
 function validateBody({body}, res, next) {
   const invalid = () => res.status(400).send('Malformed request');
-  if (validateEmail(body.email) === false) return invalid();
+  const nameLength = stringSize(body.name);
+  if (nameLength > 64 || nameLength < 1) return invalid();
   try {
     body.admin = parseBool(body.admin, false);
   }

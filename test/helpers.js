@@ -1,6 +1,6 @@
 const {
   parseBool,
-  validateEmail,
+  stringSize,
 } = require('../helpers.js');
 
 const undef = undefined;
@@ -31,40 +31,12 @@ describe('Helper functions', () => {
       expect(() => parseBool('42',   undef)).to.throw('Invalid bool');
     })
   })
-  describe(`'validateEmail' function`, () => {
-    it('Returns true if the email is valid', () => {
-      expect(validateEmail('alice@example.com')).to.be.true;
-    })
-    it(`Returns undefined if email is ''`, () => {
-      expect(validateEmail('')).to.be.undefined;
-    })
-    it(`Returns false if it doesn't have exactly one '@' sign`, () => {
-      expect(validateEmail('alice.example.com')).to.be.false;
-      expect(validateEmail('alice@mail@example.com')).to.be.false;
-    })
-    it(`Returns false if it has no local part`, () => {
-      expect(validateEmail('@example.com')).to.be.false;
-    })
-    it('Returns false the local part includes invalid characters', () => {
-      expect(validateEmail('a"b (c)d,e:f;gi [jk]l@example.com')).to.be.false;
-    })
-    describe(`Returns false if it has an invalid domain`, () => {
-      it('Returns false if it has no domain', () => {
-        expect(validateEmail('alice@')).to.be.false;
-        expect(validateEmail('alice@.')).to.be.false;
-      })
-      it('Returns false if it includes invalid characters', () => {
-        expect(validateEmail('alice@!nv&l!d.#com!')).to.be.false;
-      })
-      it('Returns false if it has no top-level domain', () => {
-        expect(validateEmail('alice@.com')).to.be.false;
-      })
-      it('Returns false if it has no second-level domain', () => {
-        expect(validateEmail('alice@example.')).to.be.false;
-      })
-      it(`Accepts third-level (or higher) domains`, () => {
-        expect(validateEmail('alice@mail.example.com')).to.be.true;
-      })
+  describe(`'stringSize' function`, () => {
+    it('Returns n for an n byte string', () => {
+      expect(stringSize('')).to.deep.equal(0);
+      expect(stringSize('3')).to.deep.equal(1);
+      expect(stringSize('3.1415')).to.deep.equal(6);
+      expect(stringSize('3.14159265358979323846264338327950288419716939937510582097494459')).to.deep.equal(64);
     })
   })
 })

@@ -57,15 +57,21 @@ describe('Middlewares', () => {
     afterEach(() => {
       reset();
     })
-    it('Rejects invalid emails', () => {
+    it('Rejects invalid names', () => {
       validateBody({body: {
-        email: '#broken.email!@example.com$',
+        name: 'A very looooooooooooooooooooooooooooooooooooooooooooooooooooooong name!',
+      }}, res, next);
+      expectRejection();
+      reset();
+
+      validateBody({body: {
+        name: '',
       }}, res, next);
       expectRejection();
     })
     it('Rejects invalid boolean values for admin', () => {
       validateBody({body: {
-        email: 'bob@example.com',
+        name: 'bob',
         admin: `I'm not a valid bool!`,
       }}, res, next);
       expectRejection();
@@ -73,13 +79,13 @@ describe('Middlewares', () => {
     it('Parses valid boolean values for admin', () => {
       const req = {
         body: {
-          email: 'charlie@example.com',
+          name: 'charlie',
           admin: 'true',
         }
       };
       const expected = {
         body: {
-          email: 'charlie@example.com',
+          name: 'charlie',
           admin: true,
         }
       };
@@ -93,7 +99,7 @@ describe('Middlewares', () => {
     it('Calls next only when all values are valid', () => {
       validateBody({
         body: {
-          email: 'charlie@example.com',
+          name: 'charlie',
           admin: 'true',
         }
       }, res, next)
@@ -101,7 +107,7 @@ describe('Middlewares', () => {
       reset();
       validateBody({
         body: {
-          email: '#broken.email!@example.com$',
+          name: 'A very looooooooooooooooooooooooooooooooooooooooooooooooooooooong name!',
           admin: `I'm not a valid bool!`,
         }
       }, res, next)
