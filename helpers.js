@@ -20,7 +20,19 @@ function stringSize(str) {
   return Buffer.byteLength(str, 'utf8');
 }
 
+function validPassword(pass) {
+  if (pass.length < 12) return false;
+  let valid = true
+  const regexps = [
+    /[A-Z]/, /[a-z]/,
+    /[0-9]/, /[&*#!%@$.^_-]/
+  ];
+  regexps.forEach(r => valid = valid && r.test(pass));
+  return valid;
+}
+
 module.exports = {
   parseBool,
   stringSize,
+  validPassword,
 };

@@ -31,9 +31,9 @@ process.on('exit', code => {
 let commandCount = 0;
 let status = 0;
 
-function run(text, query) {
+function run(text, query, args) {
   commandCount++;
-  db.query(query).then(
+  db.query(query, args).then(
   result => {
     stdout.write(`\r${text}`);
   },
@@ -99,3 +99,26 @@ run(`Created table 'orders'`, `
     status boolean
   );`
 );
+
+commandCount++;
+require('./bcrypt.js').hash(env.ADMIN_PASS).then(
+ADMIN_HASH => {
+  stdout.write('\rHashing admin password         ');
+  run(`Added admin user`, `
+    INSERT INTO users
+    (name, hash, admin)
+    VALUES ($1, $2, true)`,
+    [env.ADMIN_NAME, ADMIN_HASH]
+  );
+},
+error => {
+  stdout.write(`\r${error}\n`);
+  status = 1;
+})
+.finally(() => {
+  console.groupEnd();
+  commandCount--;
+  if (commandCount < 1) {
+    process.exit(status);
+  }
+});

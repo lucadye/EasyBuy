@@ -1,6 +1,7 @@
 const {
   parseBool,
   stringSize,
+  validPassword,
 } = require('../helpers.js');
 
 const undef = undefined;
@@ -37,6 +38,28 @@ describe('Helper functions', () => {
       expect(stringSize('3')).to.deep.equal(1);
       expect(stringSize('3.1415')).to.deep.equal(6);
       expect(stringSize('3.14159265358979323846264338327950288419716939937510582097494459')).to.deep.equal(64);
+    })
+  })
+  describe(`'validPassword' function`, () => {
+    it('Rejects passwords with less than 12 characters', () => {
+      expect(validPassword('Uh!a$6#e')).to.be.false;
+      expect(validPassword('y5wMX9#2jKgh')).to.be.true;
+    })
+    it('Requires at least 1 lowercase letter', () => {
+      expect(validPassword('Y5WMX9#2JKGH')).to.be.false;
+      expect(validPassword('y5wMX9#2jKgh')).to.be.true;
+    })
+    it('Requires at least 1 uppercase letter', () => {
+      expect(validPassword('y5wmx9#2jkgh')).to.be.false;
+      expect(validPassword('y5wMX9#2jKgh')).to.be.true;
+    })
+    it('Requires at least 1 number', () => {
+      expect(validPassword('yFwMXN#TjKgh')).to.be.false;
+      expect(validPassword('y5wMX9#2jKgh')).to.be.true;
+    })
+    it('Requires at least 1 symbol', () => {
+      expect(validPassword('y5wMX9H2jKgh')).to.be.false;
+      expect(validPassword('y5wMX9#2jKgh')).to.be.true;
     })
   })
 })

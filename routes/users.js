@@ -9,7 +9,14 @@ const {
   validateId,
 } = require('../middlewares.js');
 
-router.get('/:id', validateId, asyncHandler(async ({params, db}, res) => {
+function userPermitted(req, res, next) {
+  if (!req.isAuthenticated()) return res.sendStatus(401);
+  if (req.user.admin) return next();
+  if (req.params.id !== `${req.user.id}`) return res.sendStatus(403);
+  return next();
+}
+
+router.get('/:id', userPermitted, validateId, asyncHandler(async ({params, db}, res) => {
   const result = await db.query(`
     SELECT id, name, admin, cart_id
     FROM users
@@ -23,7 +30,7 @@ router.get('/:id', validateId, asyncHandler(async ({params, db}, res) => {
   }
 }));
 
-router.patch('/:id', validateId, validateBody, asyncHandler(async ({params, body, db}, res) => {
+router.patch('/:id', userPermitted, validateId, validateBody, asyncHandler(async ({params, body, db}, res) => {
   const result = await db.query(`
     SELECT id, name, admin, hash
     FROM users
@@ -39,7 +46,7 @@ router.patch('/:id', validateId, validateBody, asyncHandler(async ({params, body
   if (body.admin === undefined) body.admin = user.admin;
   if (body.password) body.hash = await bcrypt.hash(body.password);
   else body.hash = user.hash;
-
+  
   await db.query(`
     UPDATE users
     SET name = $2, admin = $3, hash = $4
@@ -48,7 +55,7 @@ router.patch('/:id', validateId, validateBody, asyncHandler(async ({params, body
   res.status(204).send('Edited the user');
 }));
 
-router.delete('/:id', validateId, asyncHandler(async ({params, db}, res) => {
+router.delete('/:id', userPermitted, validateId, asyncHandler(async ({params, db}, res) => {
   const result = await db.query(`
     SELECT id, name, admin, cart_id
     FROM users

@@ -16,6 +16,12 @@ process.on('exit', code => {
 const express = require('express');
 const app = express();
 
+app.use(express.json());
+
+app.use(require('./session.js'));
+
+require('./passport.js').use(app);
+
 require('./docs.js')(app, '/docs');
 
 app.use('/api', (req, res, next) => {
