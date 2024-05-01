@@ -53,5 +53,6 @@ function run(text, query) {
 run(`Dropped table 'orders'`, `DROP TABLE IF EXISTS orders;`);
 run(`Dropped table 'users'`, `DROP TABLE IF EXISTS users;`);
 run(`Dropped table 'product_lists'`, `DROP TABLE IF EXISTS product_lists;`);
+run(`Dropped table 'product_imagess'`, `DROP TABLE IF EXISTS product_images;`);
 run(`Dropped table 'product_options'`, `DROP TABLE IF EXISTS product_options;`);
 run(`Dropped table 'products'`, `DROP TABLE IF EXISTS products;`);

@@ -3,7 +3,6 @@ const router = express.Router();
 
 const bcrypt = require('../bcrypt.js');
 
-const asyncHandler = require('express-async-handler');
 const {
   validateBody,
   validateId,
@@ -16,7 +15,7 @@ function userPermitted(req, res, next) {
   return next();
 }
 
-router.get('/:id', userPermitted, validateId, asyncHandler(async ({params, db}, res) => {
+router.get('/:id', userPermitted, validateId, async ({params, db}, res) => {
   const result = await db.query(`
     SELECT id, name, admin, cart_id
     FROM users
@@ -28,9 +27,9 @@ router.get('/:id', userPermitted, validateId, asyncHandler(async ({params, db}, 
   } else {
     res.status(404).send('Unable to find user');
   }
-}));
+});
 
-router.patch('/:id', userPermitted, validateId, validateBody, asyncHandler(async ({params, body, db}, res) => {
+router.patch('/:id', userPermitted, validateId, validateBody, async ({params, body, db}, res) => {
   const result = await db.query(`
     SELECT id, name, admin, hash
     FROM users
@@ -53,9 +52,9 @@ router.patch('/:id', userPermitted, validateId, validateBody, asyncHandler(async
     WHERE id = $1;
   `, [params.id, body.name, body.admin, body.hash]);
   res.status(204).send('Edited the user');
-}));
+});
 
-router.delete('/:id', userPermitted, validateId, asyncHandler(async ({params, db}, res) => {
+router.delete('/:id', userPermitted, validateId, async ({params, db}, res) => {
   const result = await db.query(`
     SELECT id, name, admin, cart_id
     FROM users
@@ -72,6 +71,6 @@ router.delete('/:id', userPermitted, validateId, asyncHandler(async ({params, db
     WHERE id = $1;
   `, [params.id]);
   res.status(204).send('Deleted the user');
-}));
+});
 
 module.exports = router;

@@ -19,6 +19,10 @@
       "description": "Operations used for interfacing with products."
     },
     {
+      "name": "Product Images",
+      "description": "Operations used for interfacing with product images."
+    },
+    {
       "name": "Product Options",
       "description": "Operations used for interfacing with product options."
     },
@@ -252,7 +256,7 @@
         "requestBody": {
           "content": {
             "application/json": {
-              "example": "{\n  \"name\": \"'Hello, World!' Button\",\n  \"description\": \"The *echo* of a programmers first program, *print()*-ed onto a quality metal button.\",\n  \"price\": 1,\n  \"options\": [\n    {\n      \"name\": \"Generic\"\n    },\n    {\n      \"name\": \"C\",\n      \"price_mod\": 0.25\n    },\n    {\n      \"name\": \"Python 3\",\n      \"price_mod\": 0.25\n    },\n    {\n      \"name\": \"JavaScript\",\n      \"price_mod\": 0.25\n    },\n    {\n      \"name\": \"PHP\",\n      \"price_mod\": 0.25\n    }\n  ]\n}"
+              "example": "{\n  \"name\": \"'Hello, World!' Button\",\n  \"description\": \"The *echo* of a programmers first program, *print()*-ed onto a quality metal button.\",\n  \"price\": 1\n}"
             }
           }
         },
@@ -356,6 +360,119 @@
         },
         "tags": [
           "Products"
+        ]
+      }
+    },
+    "/images/{productId}": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "productId",
+          "schema": {
+            "type": "integer"
+          },
+          "required": true,
+          "description": "The unique id of a product"
+        }
+      ],
+      "get": {
+        "summary": "Retrieves a product's images",
+        "operationId": "productImageBrowse",
+        "responses": {
+          "200": {
+            "description": "Retrieved the product images",
+            "content": {
+              "application/json": {
+                "example": "[\n  {\n    \"id\": 1,\n    \"index\": 1,\n    \"path\": \"api/images/1-1.jpeg\"\n  },\n  {\n    \"id\": 1,\n    \"index\": 2,\n    \"path\": \"api/images/1-2.png\"\n  },\n  {\n    \"id\": 2,\n    \"index\": 1,\n    \"path\": \"api/images/2-1.jpg\"\n  }\n]"
+              }
+            }
+          },
+          "404": {
+            "description": "Unable to find product images"
+          },
+          "default": {
+            "description": "Default error sample response"
+          }
+        },
+        "tags": [
+          "Product Images"
+        ]
+      }
+    },
+    "/images/{productId}-{imageIndex}": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "productId",
+          "schema": {
+            "type": "integer"
+          },
+          "required": true,
+          "description": "The unique id of a product"
+        },
+        {
+          "in": "path",
+          "name": "imageIndex",
+          "schema": {
+            "type": "integer"
+          },
+          "required": true,
+          "description": "The index of a product image"
+        }
+      ],
+      "get": {
+        "summary": "Retrieves a product image",
+        "operationId": "productImageRead",
+        "responses": {
+          "200": {
+            "description": "Retrieved the product image"
+          },
+          "404": {
+            "description": "Unable to find product image"
+          },
+          "default": {
+            "description": "Default error sample response"
+          }
+        },
+        "tags": [
+          "Product Images"
+        ]
+      },
+      "put": {
+        "summary": "Replaces a product image",
+        "operationId": "productImagePut",
+        "description": "Request body must be an image",
+        "responses": {
+          "204": {
+            "description": "Modified the product image"
+          },
+          "400": {
+            "description": "Invalid image"
+          },
+          "default": {
+            "description": "Default error sample response"
+          }
+        },
+        "tags": [
+          "Product Images"
+        ]
+      },
+      "delete": {
+        "summary": "Deletes a product image",
+        "operationId": "productImageDelete",
+        "responses": {
+          "204": {
+            "description": "Deleted the product image"
+          },
+          "404": {
+            "description": "Unable to find product image"
+          },
+          "default": {
+            "description": "Default error sample response"
+          }
+        },
+        "tags": [
+          "Product Images"
         ]
       }
     },

@@ -64,8 +64,17 @@ run(`Created table 'product_options'`, `
     product_id integer REFERENCES products(id),
     option_index integer,
     option_name varchar(64) NOT NULL,
-    option_price_mod integer,
+    option_price_mod decimal,
     PRIMARY KEY(product_id, option_index)
+  );`
+);
+
+run(`Created table 'product_images'`, `
+  CREATE TABLE product_images (
+    product_id integer REFERENCES products(id),
+    image_index integer,
+    image_type varchar(4) NOT NULL,
+    PRIMARY KEY(product_id, image_index)
   );`
 );
 
