@@ -5,10 +5,10 @@ const {
 
 function validateBody({body}, res, next) {
   const invalid = () => res.status(400).send('Malformed request');
-  const nameLength = stringSize(body.name);
+  const nameLength = body.name ? stringSize(body.name) : 0;
   if (nameLength > 64 || nameLength < 1) return invalid();
   try {
-    body.admin = parseBool(body.admin, false);
+    body.admin = parseBool(body.admin, undefined);
   }
   catch (err) {
     return invalid();

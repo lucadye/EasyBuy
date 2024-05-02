@@ -643,7 +643,7 @@
         "requestBody": {
           "content": {
             "application/json": {
-              "example": "[\n  {\n    \"id\": 1,\n    \"count\": 3\n  },\n  {\n    \"id\": 2,\n    \"count\": 1\n  }\n]"
+              "example": "[\n  {\n    \"id\": 1,\n    \"option_index\": 2,\n    \"count\": 3\n  },\n  {\n    \"id\": 2,\n    \"option_index\": 1,\n    \"count\": 1\n  }\n]"
             }
           }
         },
@@ -712,7 +712,7 @@
         "requestBody": {
           "content": {
             "application/json": {
-              "example": "[\n  {\n    \"id\": 1,\n    \"count\": 2\n  },\n  {\n    \"id\": 2,\n    \"count\": 1\n  }\n]"
+              "example": "[\n  {\n    \"id\": 1,\n    \"option_index\": 3,\n    \"count\": 2\n  },\n  {\n    \"id\": 2,\n    \"option_index\": 2,\n    \"count\": 1\n  }\n]"
             }
           }
         },

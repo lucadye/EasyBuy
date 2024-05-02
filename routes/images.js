@@ -3,6 +3,12 @@ const router = express.Router();
 const path = require('node:path/posix');
 const { existsSync, rmSync, writeSync, openSync } = require('fs');
 
+const adminOnly = (req, res, next) => {
+  if (!req.isAuthenticated()) return res.sendStatus(401);
+  if (!req.user.admin) return res.sendStatus(403);
+  return next();
+};
+
 const imageParser = express.raw({
   type: 'image/png',
   limit: '10mb'
@@ -75,7 +81,7 @@ async ({params: {id, index}, db}, res) => {
   res.sendFile(filePath);
 });
 
-router.put('/:id(\\d+)-:index(\\d+).:fileExt', validateId, validateIndex, imageParser,
+router.put('/:id(\\d+)-:index(\\d+).:fileExt', adminOnly, validateId, validateIndex, imageParser,
 async ({body}, res, next) => {
   if (!Buffer.isBuffer(body)) res.sendStatus(400);
   next();
@@ -107,7 +113,7 @@ async ({params: {id, index, fileExt}, body, db}, res) => {
   res.sendStatus(204);
 })
 
-router.delete('/:id(\\d+)-:index(\\d+).:fileExt', validateId, validateIndex,
+router.delete('/:id(\\d+)-:index(\\d+).:fileExt', adminOnly, validateId, validateIndex,
 async ({params: {id, index, fileExt}, db}, res) => {
   let {rows, rowCount} = await db.query(`
     SELECT image_type AS file_ext
