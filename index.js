@@ -16,6 +16,10 @@ process.on('exit', code => {
 const express = require('express');
 const app = express();
 
+app.get('/', (req, res) => {
+  res.sendStatus(200);
+});
+
 app.use(express.json());
 
 app.use(require('./session.js'));
