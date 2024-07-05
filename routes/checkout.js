@@ -20,7 +20,7 @@ const statusMap = {
 
 router.post('/', verifyUser, verifyCreditCard,
 async ({db, ...req}, res, next) => {
-  const {rows, rowCount} = await db.query(`
+  await db.query(`
     INSERT INTO orders
     (user_id, list_id, datetime)
     VALUES ($1, $2, now())
@@ -31,10 +31,7 @@ async ({db, ...req}, res, next) => {
     SET cart_id = NULL
     WHERE id = $1;
   `, [req.user.id]);
-  if (rows[0].status === null ) rows[0].status = 'pending';
-  if (rows[0].status === false) rows[0].status = 'rejected';
-  if (rows[0].status === true ) rows[0].status = 'fulfilled';
-  res.json(rows[0]);
+  res.redirect(`../users/${req.user.id}/orders`);
 });
 
 module.exports = router;

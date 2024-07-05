@@ -10,13 +10,10 @@ const { validateBody } = require('../middlewares.js');
 
 router.post('/sign-up', validateBody, (req, res, next) => {
   if (!req.body.admin) return next();
-  const unauthorized = () => {
-    res.status(403).send('Only admins can create admin accounts');
-  };
-  if (!req.isAuthenticated()) return unauthorized();
-  if (!req.user.admin) return unauthorized();
+  if (req.isAuthenticated() && !req.user.admin) {
+    return res.status(403).send('Only admins can create admin accounts');
+  }
   return next();
-
 }, async ({db, body}, res, next) => {
   if (!validPassword(body.password)) {
     return res.status(400).send('Invalid password');

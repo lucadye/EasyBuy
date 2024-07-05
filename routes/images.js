@@ -57,7 +57,7 @@ async ({params: {id}, db}, res) => {
   if (rowCount < 1) return res.sendStatus(204);
   const images = [];
   rows.forEach(({file_ext, index}) => {
-    const path = `api/images/${id}-${index}.${file_ext}`;
+    const path = `/images/${id}-${index}.${file_ext}`;
     images.push({
       id,
       index,
