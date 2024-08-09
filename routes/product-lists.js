@@ -63,8 +63,8 @@ router.get('/:id', adminOnly, validateId, async ({db, ...req}, res) => {
 });
 
 
-router.post('/', adminOnly, async ({db, body, ...req}, res) => {
-  if (!body.products) return res.sendStatus(400);
+router.post('/', async ({db, body, ...req}, res) => {
+  if (!body) return res.sendStatus(400);
   let result = await db.query(`
     SELECT list_id
     FROM product_lists
@@ -73,14 +73,14 @@ router.post('/', adminOnly, async ({db, body, ...req}, res) => {
   `);
   let list_id = 1;
   if (result.rowCount > 0) list_id += result.rows[0].list_id;
-  for (const item of body.products) {
+  for (const item of body) {
     await db.query(`
       INSERT INTO product_lists
       (list_id, product_id, product_option, product_count)
       VALUES ($1, $2, $3, $4);
     `, [list_id, item.id, item.option_index, item.count]);
   }
-  res.redirect(list_id.toString());
+  res.send(JSON.stringify({id: list_id}));
 });
 
 

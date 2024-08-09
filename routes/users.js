@@ -29,7 +29,7 @@ router.get('/:id', userPermitted, validateId, async ({params, db}, res) => {
   }
 });
 
-router.patch('/:id', userPermitted, validateId, validateBody, async ({params, body, db, ...req}, res) => {
+router.patch('/:id', userPermitted, validateId, async ({params, body, db, ...req}, res) => {
   const result = await db.query(`
     SELECT id, name, admin, hash, cart_id
     FROM users
@@ -90,6 +90,23 @@ router.get('/:id/orders', userPermitted, async ({db, ...req}, res, next) => {
     }
   });
   res.json(rows);
+});
+
+router.get('/:id/orders/latest', userPermitted, async ({db, ...req}, res, next) => {
+  const {rows, rowCount} = await db.query(`
+    SELECT id, datetime, status, list_id
+    FROM orders
+    WHERE user_id = $1
+    ORDER BY datetime DESC;
+  `, [req.params.id]);
+  if (rowCount < 1) return res.sendStatus(404);
+  const order = rows[0];
+  switch (order.status) {
+    case null : order.status = 'pending'  ; break;
+    case false: order.status = 'rejected' ; break;
+    case true : order.status = 'fulfilled'; break;
+  }
+  res.json(order);
 });
 
 router.get('/:id/orders/:orderId', userPermitted, async ({db, ...req}, res, next) => {
