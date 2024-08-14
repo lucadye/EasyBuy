@@ -1,6 +1,14 @@
 const express = require('express');
 const router = express.Router();
 
+const cors = require('cors')
+const options = {
+  origin: process.env.CLIENT_ORIGIN,
+  credentials: true,
+};
+router.use(cors(options));
+router.options('*', cors(options))
+
 router.use(express.json());
 
 router.use('/users',         require('./routes/users.js'          ));

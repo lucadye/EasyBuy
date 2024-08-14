@@ -1,6 +1,5 @@
 require('dotenv').config();
 const PORT = process.env.EXPRESS_PORT || 3141;
-const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN;
 console.log('[dotenv] Imported configs from .env')
 
 
@@ -16,12 +15,6 @@ process.on('exit', code => {
 
 const express = require('express');
 const app = express();
-var cors = require('cors')
-
-app.use(cors({
-  origin: CLIENT_ORIGIN,
-  credentials: true,
-}));
 
 app.get('/', (req, res) => {
   res.sendStatus(200);
