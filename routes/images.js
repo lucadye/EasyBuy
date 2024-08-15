@@ -94,6 +94,11 @@ async ({params: {id, index, fileExt}, body, db}, res, next) => {
       AND image_index = $2;
   `, [id, index]);
   if (rowCount > 0) return next();
+  await db.query(`
+    INSERT INTO product_images (
+      product_id, image_index, image_type
+    ) VALUES ($1, $2, $3);
+  `, [id, index, fileExt]);
   const fd = openSync(path.resolve(`images/${id}-${index}.${fileExt}`), 'w');
   writeSync(fd, body);
   res.sendStatus(201);
