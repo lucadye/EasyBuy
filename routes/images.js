@@ -10,7 +10,7 @@ const adminOnly = (req, res, next) => {
 };
 
 const imageParser = express.raw({
-  type: 'image/png',
+  type: 'image/jpeg',
   limit: '10mb'
 });
 
