@@ -32,6 +32,7 @@ router.post('/sign-up', validateBody, (req, res, next) => {
       res.status(400).send('Name already in use');
     }
     else {
+      res.sendStatus(500);
       throw error;
     }
   });
