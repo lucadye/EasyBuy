@@ -93,7 +93,7 @@ run(`Created table 'users'`, `
   CREATE TABLE users (
     id serial PRIMARY KEY,
     name varchar(64) UNIQUE NOT NULL,
-    hash varchar(72) NOT NULL,
+    hash varchar(72),
     admin boolean NOT NULL DEFAUlT false,
     cart_id integer
   );`

@@ -30,6 +30,36 @@ function use(app) {
     }
   ));
 
+  const GoogleStrategy = require('passport-google-oauth20').Strategy;
+  passport.use(new GoogleStrategy({
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: process.env.SERVER_ORIGIN + '/api/auth/google/callback',
+      scope: [ 'profile' ],
+      session: true,
+    }, async (accessToken, refreshToken, profile, done) => {
+      let {rows, rowCount} = await db.query(`
+        SELECT id, name, admin
+        FROM users
+        WHERE name = $1;
+      `, [profile.id]);
+      if (rowCount < 1) {
+        rows = await db.query(`
+          INSERT INTO users (name, admin)
+          VALUES ($1, false);
+          SELECT id, name, admin
+          FROM users
+          WHERE name = $1;
+        `, [profile.id]);
+      }
+      return done(null, {
+        id:    rows[0].id,
+        name:  rows[0].name,
+        admin: rows[0].admin,
+      });
+    }
+  ));
+
   passport.serializeUser(async (user, done) => {
     done(null, user.id);
   });

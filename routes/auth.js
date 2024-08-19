@@ -57,5 +57,6 @@ router.post('/sign-out', (req, res, next) => {
   });
 });
 
+router.use('/google', require('./googleAuth'));
 
 module.exports = router;
