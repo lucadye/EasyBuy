@@ -44,9 +44,11 @@ function use(app) {
         WHERE name = $1;
       `, [profile.id]);
       if (rowCount < 1) {
-        rows = await db.query(`
+        await db.query(`
           INSERT INTO users (name, admin)
           VALUES ($1, false);
+        `, [profile.id]);
+        rows = await db.query(`
           SELECT id, name, admin
           FROM users
           WHERE name = $1;
