@@ -15,6 +15,7 @@ process.on('exit', code => {
 
 const express = require('express');
 const app = express();
+app.set('trust proxy', 1);
 
 app.get('/', (req, res) => {
   res.sendStatus(200);
