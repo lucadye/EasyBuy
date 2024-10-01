@@ -1,2 +1,2 @@
 # EasyBuy
-A RESTful Backend for E-Commerce sites.
+A RESTful E-Commerce back-end/API. It uses Node.js, Express.js, and PostgreSQL.
